@@ -1,6 +1,7 @@
 import { Avatar, Button, Typography } from 'antd';
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
+import { auth, db } from '../../firebase/config';
 
 const WrapperStyled = styled.div`
   display: flex;
@@ -15,13 +16,30 @@ const WrapperStyled = styled.div`
 `;
 
 export default function UserInfo() {
+  useEffect(() => {
+    db.collection('users').onSnapshot((snapshot) => {
+      const data = snapshot.docs.map((doc) => ({
+        ...doc.data(),
+        id: doc.id
+      }));
+      console.log({ data, snapshot, docs: snapshot.docs });
+    });
+  }, []);
+
   return (
     <WrapperStyled>
       <div>
         <Avatar>A</Avatar>
         <Typography.Text className="username">ABC</Typography.Text>
       </div>
-      <Button>Đăng xuất</Button>
+      <Button
+        ghost
+        onClick={() => {
+          auth.signOut();
+        }}
+      >
+        Đăng xuất
+      </Button>
     </WrapperStyled>
   );
 }
