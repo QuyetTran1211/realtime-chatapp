@@ -2,8 +2,6 @@ import React from 'react';
 import { Button, Collapse, Typography } from 'antd';
 import styled from 'styled-components';
 import { PlusSquareOutlined } from '@ant-design/icons';
-import useFireStore from '../../hooks/useFireStore';
-import { AuthContext } from '../Context/AuthProvider';
 import { AppContext } from '../Context/AppProvider';
 
 const { Panel } = Collapse;
@@ -58,9 +56,10 @@ export default function RoomList() {
 
   // console.log({ rooms });
 
-  const { rooms, setIsAddRoomVisible } = React.useContext(AppContext);
+  const { rooms, setIsAddRoomVisible, setSelectedRoomId } =
+    React.useContext(AppContext);
 
-  console.log({ rooms });
+  // console.log({ rooms });
 
   const handleAddRoom = () => {
     setIsAddRoomVisible(true);
@@ -70,7 +69,9 @@ export default function RoomList() {
     <Collapse ghost defaultActiveKey={['1']}>
       <PanelStyled header="Danh sách các phòng" key="1">
         {rooms.map((room) => (
-          <LinkStyled key={room.id}>{room.name}</LinkStyled>
+          <LinkStyled key={room.id} onClick={() => setSelectedRoomId(room.id)}>
+            {room.name}
+          </LinkStyled>
         ))}
         <Button
           type="text"

@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useContext, useMemo } from 'react';
 import styled from 'styled-components';
 import { Avatar, Button, Form, Input, Tooltip } from 'antd';
 import { UserAddOutlined } from '@ant-design/icons';
 import Message from './Message';
+import { AppContext } from '../Context/AppProvider';
 
 const HeaderStyled = styled.div`
   display: flex;
@@ -67,31 +68,39 @@ const MessageListStyled = styled.div`
 `;
 
 export default function ChatWindow() {
+  const { selectedRoom, members, setIsInviteMemberVisible } =
+    useContext(AppContext);
+
   return (
     <WrapperStyled>
       <HeaderStyled>
         <div className="header__info">
-          <p className="header__title">Room 1</p>
-          <span className="header__description">Đây là room 1</span>
+          <p className="header__title">{selectedRoom?.name}</p>
+          <span className="header__description">
+            {selectedRoom?.description}
+          </span>
         </div>
         <ButtonGroupStyled>
           <div>
-            <Button icon={<UserAddOutlined />} type="text">
+            <Button
+              icon={<UserAddOutlined />}
+              type="text"
+              onClick={setIsInviteMemberVisible}
+            >
               Mời
             </Button>
             <Avatar.Group size="small" maxCount={2}>
-              <Tooltip title="A">
-                <Avatar>A</Avatar>
-              </Tooltip>
-              <Tooltip title="A">
-                <Avatar>b</Avatar>
-              </Tooltip>
-              <Tooltip title="A">
-                <Avatar>c</Avatar>
-              </Tooltip>
-              <Tooltip title="A">
-                <Avatar>d</Avatar>
-              </Tooltip>
+              {members?.map((member) => (
+                <Tooltip key={member.id} title={member.displayName}>
+                  <Avatar
+                    src={
+                      member.photoURL
+                        ? member.photoURL
+                        : member.displayName?.chartAt(0)?.toUpperCase()
+                    }
+                  />
+                </Tooltip>
+              ))}
             </Avatar.Group>
           </div>
         </ButtonGroupStyled>

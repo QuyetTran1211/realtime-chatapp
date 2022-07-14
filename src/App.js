@@ -7,6 +7,7 @@ import AuthProvider from './components/Context/AuthProvider';
 import React from 'react';
 import AppProvider from './components/Context/AppProvider';
 import AddRoomModal from './components/Modals/AddRoomModal';
+import InviteMemberModal from './components/Modals/InviteMemberModal';
 
 export default function App() {
   return (
@@ -18,6 +19,7 @@ export default function App() {
             <Route element={<Login />} path="/login" />
           </Routes>
           <AddRoomModal />
+          <InviteMemberModal />
         </AppProvider>
       </AuthProvider>
     </BrowserRouter>
